@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm *)",
+      "PowerShell(mkdir ids-react *)",
+      "PowerShell(Copy-Item *)",
+      "PowerShell(netstat *)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(python --version 2>&1)",
+      "PowerShell(python C:\\\\tmp\\\\extract_pdf.py \"c:\\\\Users\\\\Jishad\\\\Documents\\\\OCTAPOS\\\\Saudhi - wesite\\\\IDS-PDF new.pdf\" 8 30 2>&1)",
+      "PowerShell(python C:\\\\tmp\\\\extract_pdf.py \"c:\\\\Users\\\\Jishad\\\\Documents\\\\OCTAPOS\\\\Saudhi - wesite\\\\GF30592A-EN_DM-TOX_IDS_4.pdf\" 0 4 2>&1)",
+      "PowerShell(python -c \"import pdfplumber; pdf = pdfplumber.open\\(r'c:\\\\Users\\\\Jishad\\\\Documents\\\\OCTAPOS\\\\Saudhi - wesite\\\\GF30611A-EN_FP-LEL_IDS_3.pdf'\\); p = pdf.pages[0]; imgs = p.images; print\\(len\\(imgs\\), 'images'\\); print\\(imgs[0] if imgs else 'none'\\)\")",
+      "PowerShell(python C:\\\\tmp\\\\extract_images.py 2>&1)",
+      "PowerShell(python C:\\\\tmp\\\\extract_images2.py 2>&1)"
+    ]
+  }
+}

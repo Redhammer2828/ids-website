@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Bebas+Neue&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body { font-family: 'DM Sans', sans-serif; color: #334155; background: #fff; overflow-x: hidden; line-height: 1.6; }
+  img { display: block; max-width: 100%; }
+  a { text-decoration: none; }
+}
+
+@layer utilities {
+  .font-display { font-family: 'Bebas Neue', sans-serif; }
+  .font-head   { font-family: 'Rajdhani', sans-serif; }
+}
+
+@keyframes floatDot {
+  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.5; }
+  50%       { transform: translateY(-18px) scale(1.1); opacity: 0.9; }
+}
+.dot-1 { animation: floatDot 4s ease-in-out infinite; }
+.dot-2 { animation: floatDot 5.5s ease-in-out infinite 0.8s; }
+.dot-3 { animation: floatDot 7s ease-in-out infinite 1.5s; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+.animate-blink { animation: blink 2s ease-in-out infinite; }
+
+@keyframes scrollPulse {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.animate-scroll-pulse { animation: scrollPulse 2.2s ease-in-out infinite; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-ticker { animation: ticker 24s linear infinite; }
+
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(41,171,226,0.07), transparent);
+  transition: left 0.5s;
+  pointer-events: none;
+  z-index: 1;
+}
+.card-shine:hover::before { left: 150%; }
