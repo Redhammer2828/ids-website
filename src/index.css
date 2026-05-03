@@ -60,3 +60,34 @@
   z-index: 1;
 }
 .card-shine:hover::before { left: 150%; }
+
+/* Products section — scanning line */
+@keyframes scan {
+  0%   { top: -2px; opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.animate-scan {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  animation: scan 3.5s ease-in-out infinite;
+}
+
+/* Dark card shine (products section) */
+.card-shine-dark {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine-dark::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(41,171,226,0.06), transparent);
+  transition: left 0.55s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.card-shine-dark:hover::before { left: 150%; }

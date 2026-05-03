@@ -77,7 +77,7 @@ export default function Hero() {
 
           {/* Trust badges */}
           <motion.div {...fadeUp(0.6)} className="flex flex-wrap gap-3">
-            {['IECEx Certified', 'Saudi Aramco Approved', 'SABIC Approved', 'CSA C/US'].map(b => (
+            {['IECEx Certified', 'Saudi Aramco Approved', 'SABIC Approved', 'SEC Approved', 'CSA C/US'].map(b => (
               <div key={b} className="inline-flex items-center gap-1.5 bg-white border border-[#D6E8F7] text-[#0D3B8E] font-head text-[0.72rem] font-bold tracking-wide uppercase px-3 py-1.5 rounded-full shadow-sm">
                 <ShieldCheck size={11} className="text-[#29ABE2]" />
                 {b}
