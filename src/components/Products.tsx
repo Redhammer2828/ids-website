@@ -220,20 +220,20 @@ export default function Products() {
   const p = products[active]
 
   return (
-    <section id="products" className="relative bg-[#050E1D] py-28 px-6 lg:px-12 overflow-hidden">
+    <section id="products" className="relative py-28 px-6 lg:px-12 overflow-hidden" style={{ background: 'linear-gradient(160deg, #0B2354 0%, #091C47 40%, #071640 100%)' }}>
 
       {/* Dot grid */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: 'radial-gradient(rgba(41,171,226,0.10) 1px, transparent 1px)',
+        backgroundImage: 'radial-gradient(rgba(41,171,226,0.13) 1px, transparent 1px)',
         backgroundSize: '36px 36px',
       }} />
 
       {/* Animated gradient orb top-right */}
       <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(13,59,142,0.35) 0%, transparent 70%)' }} />
+        style={{ background: 'radial-gradient(circle, rgba(13,59,142,0.55) 0%, transparent 70%)' }} />
       {/* Bottom-left orb */}
       <div className="absolute -bottom-40 -left-20 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(41,171,226,0.08) 0%, transparent 70%)' }} />
+        style={{ background: 'radial-gradient(circle, rgba(41,171,226,0.12) 0%, transparent 70%)' }} />
 
       {/* Giant watermark number */}
       <AnimatePresence mode="wait">
@@ -322,7 +322,7 @@ export default function Products() {
 
             {/* Progress indicator */}
             <div className="hidden lg:flex flex-col gap-1 mt-3 px-4">
-              <div className="font-head text-[0.6rem] font-bold tracking-[0.15em] uppercase text-white/20 mb-1">
+              <div className="font-head text-[0.6rem] font-bold tracking-[0.15em] uppercase text-white/45 mb-1">
                 {active + 1} / {products.length}
               </div>
               <div className="h-0.5 bg-white/10 rounded-full overflow-hidden w-full">
@@ -337,7 +337,7 @@ export default function Products() {
           </div>
 
           {/* ── Col 2: Image spotlight ── */}
-          <div className="relative bg-[#060F1D] border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-[440px] lg:min-h-[520px]">
+          <div className="relative bg-[#071A3A] border border-white/[0.08] rounded-2xl overflow-hidden flex flex-col items-center justify-center min-h-[440px] lg:min-h-[520px]">
 
             {/* Circuit grid */}
             <div className="absolute inset-0" style={{
@@ -434,13 +434,13 @@ export default function Products() {
               </div>
 
               {/* Description */}
-              <p className="text-[0.875rem] text-[#94B8D4] leading-[1.8] mb-7 pl-4 border-l-2" style={{ borderColor: p.color + '35' }}>
+              <p className="text-[0.875rem] text-[#C2D8EE] leading-[1.8] mb-7 pl-4 border-l-2" style={{ borderColor: p.color + '35' }}>
                 {p.desc}
               </p>
 
               {/* Features */}
               <div className="mb-7">
-                <div className="font-head text-[0.6rem] font-bold tracking-[0.22em] uppercase text-white/25 mb-4">
+                <div className="font-head text-[0.6rem] font-bold tracking-[0.22em] uppercase text-white/50 mb-4">
                   Key Features
                 </div>
                 <div className="grid grid-cols-1 gap-2.5">
@@ -458,7 +458,7 @@ export default function Products() {
                       >
                         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: p.color }} />
                       </div>
-                      <span className="font-head text-[0.84rem] font-semibold text-white/80 group-hover/feat:text-white transition-colors duration-200">
+                      <span className="font-head text-[0.84rem] font-semibold text-white/90 group-hover/feat:text-white transition-colors duration-200">
                         {f}
                       </span>
                     </motion.div>
@@ -468,7 +468,7 @@ export default function Products() {
 
               {/* Applications */}
               <div className="mb-8">
-                <div className="font-head text-[0.6rem] font-bold tracking-[0.22em] uppercase text-white/25 mb-3">
+                <div className="font-head text-[0.6rem] font-bold tracking-[0.22em] uppercase text-white/50 mb-3">
                   Applications
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -478,7 +478,7 @@ export default function Products() {
                       initial={{ opacity: 0, scale: 0.85 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: ai * 0.05 + 0.2, duration: 0.28 }}
-                      className="font-head text-[0.7rem] font-semibold tracking-wide px-3.5 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] text-white/40 hover:text-white/80 hover:border-white/20 transition-all duration-200 cursor-default"
+                      className="font-head text-[0.7rem] font-semibold tracking-wide px-3.5 py-1.5 rounded-full border border-white/[0.14] bg-white/[0.07] text-white/65 hover:text-white/90 hover:border-white/25 transition-all duration-200 cursor-default"
                     >
                       {app}
                     </motion.span>
@@ -490,13 +490,13 @@ export default function Products() {
               <div className="flex items-center justify-between pt-5 border-t border-white/[0.07]">
                 <div className="flex items-center gap-5">
                   <div>
-                    <div className="font-head text-[0.58rem] font-bold tracking-[0.15em] uppercase text-white/20 mb-0.5">Warranty</div>
+                    <div className="font-head text-[0.58rem] font-bold tracking-[0.15em] uppercase text-white/45 mb-0.5">Warranty</div>
                     <div className="font-head text-[0.85rem] font-bold text-emerald-400">{p.warranty}</div>
                   </div>
                   <div className="w-px h-8 bg-white/10" />
                   <div>
-                    <div className="font-head text-[0.58rem] font-bold tracking-[0.15em] uppercase text-white/20 mb-0.5">Technology</div>
-                    <div className="font-head text-[0.85rem] font-bold text-white/70">{p.tag}</div>
+                    <div className="font-head text-[0.58rem] font-bold tracking-[0.15em] uppercase text-white/45 mb-0.5">Technology</div>
+                    <div className="font-head text-[0.85rem] font-bold text-white/85">{p.tag}</div>
                   </div>
                 </div>
                 <a
@@ -522,8 +522,8 @@ export default function Products() {
         {/* ── Controllers & Accessories ── */}
         <div ref={ctrlRef} className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <span className="w-5 h-px bg-white/20" />
-            <span className="font-head text-[0.68rem] font-bold tracking-[0.22em] uppercase text-white/30">
+            <span className="w-5 h-px bg-white/35" />
+            <span className="font-head text-[0.68rem] font-bold tracking-[0.22em] uppercase text-white/55">
               Controllers &amp; Accessories
             </span>
           </div>
@@ -591,14 +591,14 @@ export default function Products() {
         {/* ── Industries ticker ── */}
         <div className="overflow-hidden relative">
           <div className="absolute top-0 bottom-0 left-0 w-20 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, #050E1D, transparent)' }} />
+            style={{ background: 'linear-gradient(to right, #091C47, transparent)' }} />
           <div className="absolute top-0 bottom-0 right-0 w-20 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, #050E1D, transparent)' }} />
+            style={{ background: 'linear-gradient(to left, #091C47, transparent)' }} />
           <div className="flex gap-3 animate-ticker w-max py-2">
             {[...industries, ...industries].map((ind, i) => (
               <span
                 key={`${ind}-${i}`}
-                className="inline-flex items-center gap-1.5 whitespace-nowrap font-head text-[0.75rem] font-semibold tracking-[0.1em] uppercase text-white/25 px-4 py-2 bg-white/[0.03] border border-white/[0.06] rounded-full"
+                className="inline-flex items-center gap-1.5 whitespace-nowrap font-head text-[0.75rem] font-semibold tracking-[0.1em] uppercase text-white/50 px-4 py-2 bg-white/[0.05] border border-white/[0.10] rounded-full"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#29ABE2]/50" />
                 {ind}
