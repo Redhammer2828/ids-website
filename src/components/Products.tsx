@@ -1,8 +1,113 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring, useMotionTemplate } from 'framer-motion'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { stagger, slideUp, EASE } from '../lib/motion'
 import { Download, ShieldCheck, ArrowRight } from 'lucide-react'
+
+/* ── 3D Tilt Stage ── */
+function TiltStage({ src, alt, color }: { src: string; alt: string; color: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+
+  const cfg = { stiffness: 220, damping: 24, mass: 0.6 }
+  const sx = useSpring(mx, cfg)
+  const sy = useSpring(my, cfg)
+
+  const rotateX = useTransform(sy, [-0.5, 0.5], [16, -16])
+  const rotateY = useTransform(sx, [-0.5, 0.5], [-16, 16])
+
+  /* Rings lag behind the image — creates depth parallax */
+  const ringX = useTransform(sx, [-0.5, 0.5], [12, -12])
+  const ringY = useTransform(sy, [-0.5, 0.5], [12, -12])
+
+  /* Holographic glare — follows cursor */
+  const gx    = useTransform(sx, [-0.5, 0.5], [10, 90])
+  const gy    = useTransform(sy, [-0.5, 0.5], [10, 90])
+  const glare = useMotionTemplate`radial-gradient(circle at ${gx}% ${gy}%, rgba(255,255,255,0.26) 0%, transparent 56%)`
+  /* Glare fades when mouse is at center */
+  const glareOp = useTransform(sx, [-0.5, 0, 0.5], [0.9, 0.08, 0.9])
+
+  /* Dynamic drop shadow shifts with rotation */
+  const sdx       = useTransform(sx, [-0.5, 0.5], ['-28px', '28px'])
+  const sdy       = useTransform(sy, [-0.5, 0.5], ['-28px', '28px'])
+  const imgFilter = useMotionTemplate`drop-shadow(${sdx} ${sdy} 44px ${color}80) drop-shadow(0px 14px 28px rgba(0,0,0,0.6))`
+
+  /* Ground glow disc shifts with horizontal tilt */
+  const glowX  = useTransform(sx, [-0.5, 0.5], [-20, 20])
+  const glowOp = useTransform(sx, [-0.5, 0, 0.5], [0.38, 0.16, 0.38])
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = ref.current?.getBoundingClientRect()
+    if (!r) return
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+  const onLeave = () => { mx.set(0); my.set(0) }
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="relative flex items-center justify-center w-full h-full"
+      style={{ perspective: '900px', cursor: 'pointer' }}
+    >
+      {/* Rings — parallax (lag = appear deeper in Z) */}
+      <motion.div
+        style={{ x: ringX, y: ringY }}
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+      >
+        <div className="absolute w-[280px] h-[280px] rounded-full border border-white/[0.05] animate-[spin_40s_linear_infinite]" />
+        <div className="absolute w-[200px] h-[200px] rounded-full border border-white/[0.07]" />
+        <div className="absolute w-[130px] h-[130px] rounded-full border border-white/[0.06] animate-[spin_25s_linear_infinite_reverse]" />
+        <div className="absolute w-[280px] h-[280px] rounded-full pointer-events-none" style={{
+          background: 'conic-gradient(from 0deg, transparent 89.3deg, rgba(41,171,226,0.4) 90deg, transparent 90.7deg, transparent 179.3deg, rgba(41,171,226,0.4) 180deg, transparent 180.7deg, transparent 269.3deg, rgba(41,171,226,0.4) 270deg, transparent 270.7deg)',
+        }} />
+      </motion.div>
+
+      {/* 3D rotating layer — image + glare */}
+      <motion.div
+        style={{ rotateX, rotateY, transformStyle: 'preserve-3d', position: 'relative', zIndex: 10 }}
+        whileHover={{ scale: 1.06 }}
+        transition={{ scale: { duration: 0.35, ease: 'easeOut' } }}
+      >
+        {/* Holographic glare overlay */}
+        <motion.div
+          className="absolute inset-0 z-20 pointer-events-none"
+          style={{ background: glare, opacity: glareOp }}
+        />
+
+        {/* Product image with dynamic shadow */}
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={src}
+            src={src}
+            alt={alt}
+            initial={{ opacity: 0, scale: 0.82, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.88, y: -12 }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="relative z-10 h-[260px] lg:h-[310px] w-auto object-contain"
+            style={{ filter: imgFilter }}
+          />
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Ground glow disc */}
+      <motion.div
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 w-36 h-5 rounded-full blur-2xl pointer-events-none z-0"
+        style={{ backgroundColor: color, x: glowX, opacity: glowOp }}
+      />
+
+      {/* Scan line */}
+      <div
+        className="animate-scan absolute inset-x-0 h-[2px] pointer-events-none z-30"
+        style={{ backgroundImage: `linear-gradient(to right, transparent, ${color}70, transparent)` }}
+      />
+    </div>
+  )
+}
 
 const products = [
   {
@@ -253,29 +358,8 @@ export default function Products() {
               />
             </AnimatePresence>
 
-            {/* Concentric rings */}
-            <div className="absolute w-[280px] h-[280px] rounded-full border border-white/[0.04]" />
-            <div className="absolute w-[200px] h-[200px] rounded-full border border-white/[0.06]" />
-            <div className="absolute w-[130px] h-[130px] rounded-full border border-white/[0.06]" />
-
-            {/* Scan line */}
-            <div className="animate-scan absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent to-transparent pointer-events-none z-20"
-              style={{ backgroundImage: `linear-gradient(to right, transparent, ${p.color}70, transparent)` }} />
-
-            {/* Product image */}
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={p.model}
-                src={p.image}
-                alt={p.model}
-                initial={{ opacity: 0, scale: 0.82, y: 16 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.88, y: -12 }}
-                transition={{ duration: 0.5, ease: EASE }}
-                className="relative z-10 h-[260px] lg:h-[310px] w-auto object-contain"
-                style={{ filter: `drop-shadow(0 24px 60px ${p.color}55) drop-shadow(0 8px 20px rgba(0,0,0,0.6))` }}
-              />
-            </AnimatePresence>
+            {/* 3D tilt stage — rings + image + glare + shadow */}
+            <TiltStage src={p.image} alt={p.model} color={p.color} />
 
             {/* Range badge — top-left */}
             <AnimatePresence mode="wait">
@@ -350,7 +434,7 @@ export default function Products() {
               </div>
 
               {/* Description */}
-              <p className="text-[0.875rem] text-[#4A6080] leading-[1.8] mb-7 pl-4 border-l-2" style={{ borderColor: p.color + '35' }}>
+              <p className="text-[0.875rem] text-[#94B8D4] leading-[1.8] mb-7 pl-4 border-l-2" style={{ borderColor: p.color + '35' }}>
                 {p.desc}
               </p>
 
@@ -374,7 +458,7 @@ export default function Products() {
                       >
                         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: p.color }} />
                       </div>
-                      <span className="font-head text-[0.84rem] font-semibold text-white/55 group-hover/feat:text-white/90 transition-colors duration-200">
+                      <span className="font-head text-[0.84rem] font-semibold text-white/80 group-hover/feat:text-white transition-colors duration-200">
                         {f}
                       </span>
                     </motion.div>
@@ -458,11 +542,11 @@ export default function Products() {
               >
                 <div className="h-0.5 w-8 bg-[#29ABE2]/50 rounded mb-4" />
                 <div className="font-display text-[1.8rem] text-white leading-none mb-0.5">{c.model}</div>
-                <div className="font-head text-[0.8rem] text-[#29ABE2]/65 mb-3">{c.sub}</div>
-                <p className="text-[0.82rem] text-[#3D546B] leading-[1.65] mb-4">{c.desc}</p>
+                <div className="font-head text-[0.8rem] text-[#29ABE2] mb-3">{c.sub}</div>
+                <p className="text-[0.82rem] text-[#94B8D4] leading-[1.65] mb-4">{c.desc}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {c.feats.map(f => (
-                    <span key={f} className="bg-[#29ABE2]/10 text-[#29ABE2]/70 font-head text-[0.63rem] font-semibold px-2.5 py-1 rounded border border-[#29ABE2]/20">
+                    <span key={f} className="bg-[#29ABE2]/15 text-[#29ABE2] font-head text-[0.63rem] font-semibold px-2.5 py-1 rounded border border-[#29ABE2]/30">
                       {f}
                     </span>
                   ))}
