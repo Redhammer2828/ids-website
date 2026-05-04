@@ -91,3 +91,36 @@
   z-index: 1;
 }
 .card-shine-dark:hover::before { left: 150%; }
+
+/* ── HERO ANIMATIONS ── */
+
+/* Breathing glow orb */
+@keyframes orb {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+.animate-orb { animation: orb 8s ease-in-out infinite; }
+
+/* CTA primary button glow pulse */
+@keyframes heroGlow {
+  0%, 100% { box-shadow: 0 0 22px rgba(41,171,226,0.38), 0 4px 14px rgba(0,0,0,0.35); }
+  50%       { box-shadow: 0 0 44px rgba(41,171,226,0.70), 0 4px 22px rgba(0,0,0,0.35); }
+}
+.btn-hero-glow { animation: heroGlow 2.8s ease-in-out infinite; }
+
+/* Monitor card — horizontal scan sweep */
+@keyframes heroScan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+.hero-scan-line { animation: heroScan 2.8s ease-in-out infinite; }
+
+/* Monitor card — EQ bars */
+@keyframes eqBar {
+  0%, 100% { transform: scaleY(0.45); opacity: 0.45; }
+  50%       { transform: scaleY(1);    opacity: 0.85; }
+}
+.hero-eq-bar {
+  transform-origin: bottom;
+  animation: eqBar 1.3s ease-in-out infinite;
+}
