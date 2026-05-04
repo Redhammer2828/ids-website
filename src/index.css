@@ -94,31 +94,31 @@
 
 /* ── HERO ANIMATIONS ── */
 
-/* Breathing glow orb */
-@keyframes orb {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.65; }
+/* Light hero CTA button glow */
+@keyframes lightBtnGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(13,59,142,0.22), 0 2px 8px rgba(13,59,142,0.12); }
+  50%       { box-shadow: 0 8px 32px rgba(41,171,226,0.40), 0 4px 16px rgba(13,59,142,0.16); }
 }
-.animate-orb { animation: orb 8s ease-in-out infinite; }
+.btn-light-primary { animation: lightBtnGlow 2.8s ease-in-out infinite; }
 
-/* CTA primary button glow pulse */
-@keyframes heroGlow {
-  0%, 100% { box-shadow: 0 0 22px rgba(41,171,226,0.38), 0 4px 14px rgba(0,0,0,0.35); }
-  50%       { box-shadow: 0 0 44px rgba(41,171,226,0.70), 0 4px 22px rgba(0,0,0,0.35); }
+/* Product stage scan sweep */
+@keyframes stageScan {
+  0%   { top: 0%;   opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
 }
-.btn-hero-glow { animation: heroGlow 2.8s ease-in-out infinite; }
-
-/* Monitor card — horizontal scan sweep */
-@keyframes heroScan {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(400%); }
+.hero-stage-scan {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1.5px;
+  animation: stageScan 3.2s ease-in-out infinite;
 }
-.hero-scan-line { animation: heroScan 2.8s ease-in-out infinite; }
 
-/* Monitor card — EQ bars */
+/* EQ bars */
 @keyframes eqBar {
-  0%, 100% { transform: scaleY(0.45); opacity: 0.45; }
-  50%       { transform: scaleY(1);    opacity: 0.85; }
+  0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+  50%       { transform: scaleY(1);   opacity: 0.9; }
 }
 .hero-eq-bar {
   transform-origin: bottom;
