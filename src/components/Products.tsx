@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { motion, AnimatePresence, useMotionValue, useTransform, useSpring, useMotionTemplate } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring, useMotionTemplate, useScroll, useMotionValueEvent } from 'framer-motion'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { stagger, slideUp, EASE } from '../lib/motion'
 import { Download, ShieldCheck, ArrowRight } from 'lucide-react'
@@ -219,38 +219,67 @@ export default function Products() {
   const { ref: ctrlRef, visible: ctrlVisible } = useScrollReveal()
   const p = products[active]
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end']
+  })
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const numProducts = products.length
+    let newIndex = Math.floor(latest * numProducts)
+    if (latest === 1) newIndex = numProducts - 1
+    if (newIndex >= numProducts) newIndex = numProducts - 1
+    if (newIndex < 0) newIndex = 0
+    
+    if (newIndex !== active) {
+      setActive(newIndex)
+    }
+  })
+
+  const scrollToProduct = (index: number) => {
+    if (containerRef.current) {
+      const top = containerRef.current.getBoundingClientRect().top + window.scrollY
+      const y = top + (index * window.innerHeight)
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }
+
   return (
-    <section id="products" className="relative py-28 px-6 lg:px-12 overflow-hidden" style={{ background: 'linear-gradient(160deg, #0B2354 0%, #091C47 40%, #071640 100%)' }}>
+    <section id="products" className="relative" style={{ background: 'linear-gradient(160deg, #0B2354 0%, #091C47 40%, #071640 100%)' }}>
 
-      {/* Dot grid */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: 'radial-gradient(rgba(41,171,226,0.13) 1px, transparent 1px)',
-        backgroundSize: '36px 36px',
-      }} />
+      {/* Sticky background elements */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(rgba(41,171,226,0.13) 1px, transparent 1px)',
+          backgroundSize: '36px 36px',
+        }} />
 
-      {/* Animated gradient orb top-right */}
-      <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(13,59,142,0.55) 0%, transparent 70%)' }} />
-      {/* Bottom-left orb */}
-      <div className="absolute -bottom-40 -left-20 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(41,171,226,0.12) 0%, transparent 70%)' }} />
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(13,59,142,0.55) 0%, transparent 70%)' }} />
+        <div className="absolute -bottom-40 -left-20 w-[500px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(41,171,226,0.12) 0%, transparent 70%)' }} />
 
-      {/* Giant watermark number */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="absolute right-6 lg:right-16 top-1/2 -translate-y-1/2 font-display leading-none select-none pointer-events-none"
-          style={{ fontSize: 'clamp(14rem, 22vw, 22rem)', color: 'rgba(255,255,255,0.018)' }}
-        >
-          {String(active + 1).padStart(2, '0')}
-        </motion.div>
-      </AnimatePresence>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: EASE }}
+            className="absolute right-6 lg:right-16 top-1/2 -translate-y-1/2 font-display leading-none select-none"
+            style={{ fontSize: 'clamp(14rem, 22vw, 22rem)', color: 'rgba(255,255,255,0.018)' }}
+          >
+            {String(active + 1).padStart(2, '0')}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-      <div className="relative z-10 max-w-[1300px] mx-auto">
+      {/* Scroll-Jacked Container */}
+      <div ref={containerRef} className="relative mt-[-100vh]" style={{ height: `${products.length * 100}vh` }}>
+        <div className="sticky top-0 min-h-screen w-full flex flex-col justify-center px-6 lg:px-12 py-10 z-10">
+          <div className="w-full max-w-[1300px] mx-auto relative">
 
         {/* ── Header ── */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16">
@@ -289,7 +318,7 @@ export default function Products() {
             {products.map((prod, i) => (
               <button
                 key={prod.model}
-                onClick={() => setActive(i)}
+                onClick={() => scrollToProduct(i)}
                 className={`relative flex-shrink-0 lg:flex-shrink-0 text-left px-4 py-3.5 rounded-xl border outline-none transition-all duration-300 cursor-pointer ${
                   active === i
                     ? 'border-white/20 shadow-[0_0_24px_rgba(41,171,226,0.10)]'
@@ -519,6 +548,44 @@ export default function Products() {
           </AnimatePresence>
         </div>
 
+        {/* ── Navigation arrows hint (moved up for scroll view) ── */}
+        <div className="flex items-center justify-center gap-4 mt-6 mb-4">
+          <button
+            onClick={() => scrollToProduct(Math.max(0, active - 1))}
+            disabled={active === 0}
+            className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/30 hover:border-[#29ABE2]/40 hover:text-[#29ABE2] hover:bg-[#29ABE2]/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
+          >
+            <ArrowRight size={15} className="rotate-180" />
+          </button>
+          <div className="flex gap-2">
+            {products.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToProduct(i)}
+                className="transition-all duration-300 rounded-full"
+                style={{
+                  width: active === i ? '24px' : '6px',
+                  height: '6px',
+                  backgroundColor: active === i ? p.color : 'rgba(255,255,255,0.15)',
+                }}
+              />
+            ))}
+          </div>
+          <button
+            onClick={() => scrollToProduct(Math.min(products.length - 1, active + 1))}
+            disabled={active === products.length - 1}
+            className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/30 hover:border-[#29ABE2]/40 hover:text-[#29ABE2] hover:bg-[#29ABE2]/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
+          >
+            <ArrowRight size={15} />
+          </button>
+        </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 max-w-[1300px] mx-auto px-6 lg:px-12 py-20 bg-transparent">
+
         {/* ── Controllers & Accessories ── */}
         <div ref={ctrlRef} className="mb-16">
           <div className="flex items-center gap-3 mb-6">
@@ -554,38 +621,6 @@ export default function Products() {
               </motion.div>
             ))}
           </motion.div>
-        </div>
-
-        {/* ── Navigation arrows hint ── */}
-        <div className="flex items-center justify-center gap-4 mb-12">
-          <button
-            onClick={() => setActive(prev => Math.max(0, prev - 1))}
-            disabled={active === 0}
-            className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/30 hover:border-[#29ABE2]/40 hover:text-[#29ABE2] hover:bg-[#29ABE2]/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
-          >
-            <ArrowRight size={15} className="rotate-180" />
-          </button>
-          <div className="flex gap-2">
-            {products.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                className="transition-all duration-300 rounded-full"
-                style={{
-                  width: active === i ? '24px' : '6px',
-                  height: '6px',
-                  backgroundColor: active === i ? p.color : 'rgba(255,255,255,0.15)',
-                }}
-              />
-            ))}
-          </div>
-          <button
-            onClick={() => setActive(prev => Math.min(products.length - 1, prev + 1))}
-            disabled={active === products.length - 1}
-            className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-white/30 hover:border-[#29ABE2]/40 hover:text-[#29ABE2] hover:bg-[#29ABE2]/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
-          >
-            <ArrowRight size={15} />
-          </button>
         </div>
 
         {/* ── Industries ticker ── */}
