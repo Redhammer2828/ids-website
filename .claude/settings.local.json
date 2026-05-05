@@ -17,7 +17,10 @@
       "WebSearch",
       "WebFetch(domain:www.pe-energy.com)",
       "Bash(npx tsc *)",
-      "PowerShell(nslookup *)"
+      "PowerShell(nslookup *)",
+      "Bash(npm install *)",
+      "Bash(Get-Content \"C:\\\\Users\\\\Jishad\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Jishad-Documents-OCTAPOS-IDS-ids-website\\\\45aa7201-0509-4c21-81c3-f2f3bf806e21\\\\tasks\\\\bzfty2ep2.output\" -Wait)",
+      "Bash(Select-String -Pattern \"Local:|Error|error|failed\")"
     ]
   }
 }

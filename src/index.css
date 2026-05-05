@@ -134,10 +134,6 @@
 /* Firefox */
 html { scrollbar-width: thin; scrollbar-color: #29ABE2 #F0F7FF; }
 
-/* ── GLOBAL CURSOR HIDING (for custom cursor) ── */
-@media (pointer: fine) {
-  *, *::before, *::after { cursor: none !important; }
-}
 
 /* ── GLOW PULSE for buttons ── */
 @keyframes glowPulse {
