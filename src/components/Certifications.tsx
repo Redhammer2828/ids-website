@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { stagger, slideUp } from '../lib/motion'
 import { ShieldCheck } from 'lucide-react'
+import TextReveal from './TextReveal'
 
 const vendors = [
   { name: 'Saudi Aramco',          id: 'Vendor Code: 10116593',   color: '#0D3B8E' },
@@ -36,7 +37,7 @@ export default function Certifications() {
           <span className="w-7 h-0.5 bg-[#29ABE2]" />
           Compliance
         </div>
-        <div className="font-head text-[2.6rem] font-bold text-[#0D3B8E] leading-tight mb-2">Certifications &amp; Approvals</div>
+        <TextReveal text="Certifications & Approvals" className="font-head text-[2.6rem] font-bold text-[#0D3B8E] leading-tight mb-2" as="h2" />
         <p className="text-[#64748B] max-w-[580px] leading-[1.65] mb-12">
           Recognized by leading international certification bodies and major Saudi Arabian industrial companies. Our products are certified to the highest global safety standards.
         </p>

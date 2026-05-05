@@ -2,6 +2,9 @@ import { motion } from 'framer-motion'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { stagger, slideUp } from '../lib/motion'
 import { Building2, Truck, Flag, Headphones, Users, FlaskConical } from 'lucide-react'
+import TextReveal from './TextReveal'
+import AnimatedCounter from './AnimatedCounter'
+import TiltCard from './TiltCard'
 
 const feats = [
   { icon: <Building2 size={18} />,    title: 'Local Manufacturing',     desc: 'Made in KSA — certified production standards' },
@@ -22,9 +25,7 @@ export default function Factory() {
           <span className="w-7 h-0.5 bg-[#29ABE2]" />
           Our Facility
         </div>
-        <div className="font-head text-[2.6rem] font-bold text-[#0D3B8E] leading-tight mb-0">
-          IDS Factory — Dammam, KSA
-        </div>
+        <TextReveal text="IDS Factory — Dammam, KSA" className="font-head text-[2.6rem] font-bold text-[#0D3B8E] leading-tight mb-0" as="h2" />
 
         <motion.div
           ref={ref}
@@ -37,7 +38,7 @@ export default function Factory() {
           <motion.div variants={slideUp}>
             <div className="bg-white border border-[#D6E8F7] rounded-2xl p-8 mb-6 shadow-sm">
               <div className="font-display leading-[0.88]" style={{ fontSize: 'clamp(4.5rem, 9vw, 7.5rem)', color: '#0D3B8E' }}>
-                699<span className="text-[#29ABE2]">M²</span>
+              <AnimatedCounter end={699} className="" /><span className="text-[#29ABE2]">M²</span>
               </div>
               <div className="font-head text-[0.95rem] font-semibold tracking-[0.12em] uppercase text-[#64748B] mt-1 mb-4">
                 State-of-the-Art Manufacturing Facility
@@ -59,20 +60,21 @@ export default function Factory() {
           {/* Right features */}
           <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-4" variants={stagger}>
             {feats.map(f => (
-              <motion.div
-                key={f.title}
-                variants={slideUp}
-                whileHover={{ y: -3, boxShadow: '0 8px 24px rgba(13,59,142,0.1)' }}
-                className="flex gap-3.5 items-start bg-white border border-[#D6E8F7] rounded-xl p-4 transition-all"
-              >
-                <div className="w-9 h-9 bg-[#E3F4FC] rounded-lg flex items-center justify-center text-[#0D3B8E] flex-shrink-0">
-                  {f.icon}
-                </div>
-                <div>
-                  <strong className="block font-head text-[0.88rem] font-bold text-[#0D3B8E] mb-0.5">{f.title}</strong>
-                  <span className="text-[0.78rem] text-[#64748B] leading-[1.5]">{f.desc}</span>
-                </div>
-              </motion.div>
+              <TiltCard>
+                <motion.div
+                  key={f.title}
+                  variants={slideUp}
+                  className="flex gap-3.5 items-start bg-white border border-[#D6E8F7] rounded-xl p-4 transition-all hover:shadow-[0_8px_24px_rgba(13,59,142,0.1)]"
+                >
+                  <div className="w-9 h-9 bg-[#E3F4FC] rounded-lg flex items-center justify-center text-[#0D3B8E] flex-shrink-0">
+                    {f.icon}
+                  </div>
+                  <div>
+                    <strong className="block font-head text-[0.88rem] font-bold text-[#0D3B8E] mb-0.5">{f.title}</strong>
+                    <span className="text-[0.78rem] text-[#64748B] leading-[1.5]">{f.desc}</span>
+                  </div>
+                </motion.div>
+              </TiltCard>
             ))}
           </motion.div>
         </motion.div>

@@ -16,7 +16,8 @@
       "WebFetch(domain:www.teledynegasandflamedetection.com)",
       "WebSearch",
       "WebFetch(domain:www.pe-energy.com)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "PowerShell(nslookup *)"
     ]
   }
 }

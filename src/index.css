@@ -124,3 +124,34 @@
   transform-origin: bottom;
   animation: eqBar 1.3s ease-in-out infinite;
 }
+
+/* ── CUSTOM SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #F0F7FF; }
+::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #29ABE2, #0D3B8E); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, #0D3B8E, #29ABE2); }
+
+/* Firefox */
+html { scrollbar-width: thin; scrollbar-color: #29ABE2 #F0F7FF; }
+
+/* ── GLOBAL CURSOR HIDING (for custom cursor) ── */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+/* ── GLOW PULSE for buttons ── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(41,171,226,0.2), 0 4px 16px rgba(13,59,142,0.1); }
+  50%       { box-shadow: 0 0 20px rgba(41,171,226,0.4), 0 8px 32px rgba(13,59,142,0.15); }
+}
+
+/* ── SMOOTH reveal for sections ── */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.section-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

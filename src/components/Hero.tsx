@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, ShieldCheck, Activity } from 'lucide-react'
 import { EASE } from '../lib/motion'
+import ParticleField from './ParticleField'
+import MagneticButton from './MagneticButton'
 
 const BADGES = [
   'IECEx Certified',
@@ -38,6 +40,9 @@ export default function Hero() {
 
       {/* Soft gradient wash */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#F0F8FF] via-white to-[#E8F4FD]" />
+
+      {/* Particle constellation network */}
+      <ParticleField />
 
       {/* Dot grid — very subtle */}
       <div className="absolute inset-0 pointer-events-none" style={{
@@ -164,19 +169,23 @@ export default function Hero() {
             transition={{ delay: 1.2, duration: 0.5, ease: EASE }}
             className="flex gap-3 flex-wrap mb-10"
           >
-            <button
-              onClick={() => scrollTo('#products')}
-              className="btn-light-primary inline-flex items-center gap-2.5 bg-[#0D3B8E] text-white font-head font-bold text-[0.88rem] tracking-[0.1em] uppercase px-7 py-3.5 rounded-xl hover:bg-[#29ABE2] hover:-translate-y-0.5 transition-all duration-200 group/btn"
-            >
-              Explore Products
-              <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
-            </button>
-            <button
-              onClick={() => scrollTo('#contact')}
-              className="inline-flex items-center gap-2 bg-white text-[#0D3B8E] font-head font-bold text-[0.88rem] tracking-[0.1em] uppercase px-7 py-3.5 rounded-xl border-2 border-[#0D3B8E]/20 hover:border-[#29ABE2] hover:text-[#29ABE2] hover:-translate-y-0.5 transition-all duration-200"
-            >
-              Contact Us
-            </button>
+            <MagneticButton strength={0.3}>
+              <button
+                onClick={() => scrollTo('#products')}
+                className="btn-light-primary inline-flex items-center gap-2.5 bg-[#0D3B8E] text-white font-head font-bold text-[0.88rem] tracking-[0.1em] uppercase px-7 py-3.5 rounded-xl hover:bg-[#29ABE2] hover:-translate-y-0.5 transition-all duration-200 group/btn"
+              >
+                Explore Products
+                <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            </MagneticButton>
+            <MagneticButton strength={0.3}>
+              <button
+                onClick={() => scrollTo('#contact')}
+                className="inline-flex items-center gap-2 bg-white text-[#0D3B8E] font-head font-bold text-[0.88rem] tracking-[0.1em] uppercase px-7 py-3.5 rounded-xl border-2 border-[#0D3B8E]/20 hover:border-[#29ABE2] hover:text-[#29ABE2] hover:-translate-y-0.5 transition-all duration-200"
+              >
+                Contact Us
+              </button>
+            </MagneticButton>
           </motion.div>
 
           {/* Trust badges */}

@@ -2,6 +2,9 @@ import { motion } from 'framer-motion'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { stagger, slideUp } from '../lib/motion'
 import { Target, Eye } from 'lucide-react'
+import AnimatedCounter from './AnimatedCounter'
+import TextReveal from './TextReveal'
+import TiltCard from './TiltCard'
 
 const stats = [
   { val: '699 m²', lbl: 'Manufacturing Facility',    accent: '#29ABE2' },
@@ -22,7 +25,7 @@ export default function About() {
           <span className="w-7 h-0.5 bg-[#29ABE2]" />
           Who We Are
         </div>
-        <div className="font-head text-[2.6rem] font-bold text-[#0D3B8E] leading-tight mb-1">About IDS</div>
+        <TextReveal text="About IDS" className="font-head text-[2.6rem] font-bold text-[#0D3B8E] leading-tight mb-1" as="h2" />
         <p className="text-[#64748B] max-w-[600px] mb-12">
           A gas detector manufacturing facility established in 2025 at MODON 2, Kingdom of Saudi Arabia.
         </p>
@@ -86,15 +89,21 @@ export default function About() {
           {/* Right stats */}
           <motion.div className="grid grid-cols-2 gap-4" variants={stagger}>
             {stats.map(s => (
-              <motion.div
-                key={s.lbl}
-                variants={slideUp}
-                className="bg-white border-2 rounded-xl p-6 hover:-translate-y-1.5 hover:shadow-[0_12px_36px_rgba(13,59,142,0.12)] transition-all duration-200"
-                style={{ borderColor: s.accent + '40', borderLeftColor: s.accent, borderLeftWidth: 4 }}
-              >
-                <div className="font-display text-[2.2rem] leading-none mb-1" style={{ color: s.accent }}>{s.val}</div>
-                <div className="font-head text-[0.78rem] font-semibold tracking-[0.09em] uppercase text-[#64748B]">{s.lbl}</div>
-              </motion.div>
+              <TiltCard className="w-full">
+                <motion.div
+                  key={s.lbl}
+                  variants={slideUp}
+                  className="bg-white border-2 rounded-xl p-6 hover:-translate-y-1.5 hover:shadow-[0_12px_36px_rgba(13,59,142,0.12)] transition-all duration-200"
+                  style={{ borderColor: s.accent + '40', borderLeftColor: s.accent, borderLeftWidth: 4 }}
+                >
+                  <div className="font-display text-[2.2rem] leading-none mb-1" style={{ color: s.accent }}>
+                    {s.val === '699 m²' ? <AnimatedCounter end={699} suffix=" m²" className="" /> :
+                     s.val === '2025' ? <AnimatedCounter end={2025} decimals={0} className="" /> :
+                     s.val}
+                  </div>
+                  <div className="font-head text-[0.78rem] font-semibold tracking-[0.09em] uppercase text-[#64748B]">{s.lbl}</div>
+                </motion.div>
+              </TiltCard>
             ))}
 
             {/* Localization box */}
